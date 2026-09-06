@@ -455,7 +455,7 @@ with st.sidebar:
                 <span style="margin-left:auto; color:{status_color}; font-size:12px; font-weight:700;">● {status_text}</span>
             </div>
             <div style="display:flex; justify-content:space-between; font-size:11px; color:#5b6478; margin-top:8px;">
-                <span>Checked {datetime.now().strftime('%H:%M')}</span>
+                <span>Checked {datetime.now(ZoneInfo("Asia/Karachi").strftime('%H:%M')}</span>
                 <span>Open-Meteo + AQICN</span>
             </div>
         </div>
