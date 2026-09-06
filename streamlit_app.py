@@ -48,41 +48,75 @@ ADVISORY_TEXT = {
 }
 
 # ============================================================
-# STYLE
+# STYLE — new, more polished visual theme
 # ============================================================
 
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap');
-    html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
+    @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap');
 
+    html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
+    h1, h2, h3, h4 { font-family: 'Sora', sans-serif !important; }
+
+    /* ---------- Background ---------- */
     .stApp {
-        background: radial-gradient(ellipse at 20% 0%, #131a2b 0%, #0a0e17 55%, #05070c 100%);
+        background:
+            radial-gradient(circle at 12% -10%, rgba(0, 195, 255, 0.10) 0%, transparent 45%),
+            radial-gradient(circle at 100% 0%, rgba(124, 58, 237, 0.12) 0%, transparent 40%),
+            linear-gradient(180deg, #0b0f1a 0%, #070a12 45%, #04050a 100%);
         color: #ffffff;
     }
+
     section[data-testid="stSidebar"] {
-        background: rgba(9, 12, 20, 0.97);
-        border-right: 1px solid rgba(255,255,255,0.06);
+        background: linear-gradient(180deg, rgba(10, 13, 22, 0.98), rgba(6, 8, 14, 0.99));
+        border-right: 1px solid rgba(255,255,255,0.07);
     }
 
+    /* ---------- Hero header ---------- */
+    .hero-wrap {
+        text-align: center;
+        padding: 28px 10px 10px 10px;
+    }
+    .hero-badge {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: rgba(0, 195, 255, 0.08);
+        border: 1px solid rgba(0, 195, 255, 0.25);
+        color: #6dd3ff; font-size: 12.5px; font-weight: 700;
+        letter-spacing: 0.08em; text-transform: uppercase;
+        padding: 6px 16px; border-radius: 999px; margin-bottom: 18px;
+    }
+    .hero-title {
+        font-size: 48px; font-weight: 800; margin: 0; letter-spacing: -1px;
+        background: linear-gradient(135deg, #ffffff 20%, #a9e9ff 60%, #c7a9ff 100%);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+        color: #9aa4b8; font-size: 17px; margin: 10px auto 0 auto; max-width: 640px;
+    }
+    .hero-author {
+        color: #5b6478; font-size: 13.5px; margin-top: 10px;
+    }
+    .hero-author strong { color: #6dd3ff; }
+
+    /* ---------- Cards ---------- */
     .glass-card {
-        background: rgba(255, 255, 255, 0.035);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 20px;
-        padding: 26px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015));
+        backdrop-filter: blur(18px);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 18px;
+        padding: 24px;
         margin: 8px 0;
-        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
-        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        box-shadow: 0 10px 34px rgba(0, 0, 0, 0.35);
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     }
     .glass-card:hover {
-        transform: translateY(-4px);
-        border-color: rgba(0, 195, 255, 0.25);
-        box-shadow: 0 16px 50px rgba(0, 195, 255, 0.08);
+        transform: translateY(-3px);
+        border-color: rgba(0, 195, 255, 0.3);
+        box-shadow: 0 18px 45px rgba(0, 195, 255, 0.10);
     }
 
     .gradient-text {
-        background: linear-gradient(135deg, #00c3ff 0%, #7c3aed 50%, #a855f7 100%);
+        background: linear-gradient(135deg, #00c3ff 0%, #7c3aed 60%, #d68bff 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-weight: 700;
@@ -91,44 +125,67 @@ st.markdown("""
     h1, h2, h3, h4 { color: #ffffff !important; font-weight: 700 !important; letter-spacing: -0.02em; }
     p, span, label { color: #c7ced9; }
 
+    /* ---------- Metric boxes ---------- */
     .metric-box {
-        background: rgba(255, 255, 255, 0.025);
-        border: 1px solid rgba(255, 255, 255, 0.07);
+        background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+        border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 16px;
-        padding: 20px 22px;
+        padding: 22px 18px;
         text-align: center;
         height: 100%;
-        transition: border-color 0.3s ease, background 0.3s ease;
+        transition: border-color 0.25s ease, transform 0.25s ease;
     }
-    .metric-box:hover { border-color: rgba(0, 195, 255, 0.25); background: rgba(255, 255, 255, 0.045); }
-    .metric-value { font-size: 32px; font-weight: 800; background: linear-gradient(135deg, #00c3ff, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .metric-label { color: #8b93a7; font-size: 12.5px; margin-top: 4px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .metric-box:hover { border-color: rgba(0, 195, 255, 0.3); transform: translateY(-2px); }
+    .metric-value {
+        font-size: 30px; font-weight: 800;
+        background: linear-gradient(135deg, #00c3ff, #7c3aed);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .metric-label {
+        color: #8b93a7; font-size: 12px; margin-top: 6px;
+        letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;
+    }
 
-    .badge { padding: 5px 16px; border-radius: 999px; font-size: 12.5px; font-weight: 700; display: inline-block; letter-spacing: 0.02em; }
-    .badge-good        { background: rgba(0, 227, 150, 0.14); color: #00e396; border: 1px solid rgba(0, 227, 150, 0.3); }
-    .badge-moderate     { background: rgba(255, 213, 79, 0.14); color: #ffd54f; border: 1px solid rgba(255, 213, 79, 0.3); }
-    .badge-unhealthy    { background: rgba(255, 153, 0, 0.14); color: #ff9900; border: 1px solid rgba(255, 153, 0, 0.3); }
-    .badge-hazardous    { background: rgba(196, 77, 255, 0.14); color: #c44dff; border: 1px solid rgba(196, 77, 255, 0.3); }
+    /* ---------- Badges ---------- */
+    .badge {
+        padding: 6px 18px; border-radius: 999px; font-size: 12.5px; font-weight: 700;
+        display: inline-block; letter-spacing: 0.03em;
+    }
+    .badge-good        { background: rgba(0, 227, 150, 0.15); color: #00e396; border: 1px solid rgba(0, 227, 150, 0.35); }
+    .badge-moderate     { background: rgba(255, 213, 79, 0.15); color: #ffd54f; border: 1px solid rgba(255, 213, 79, 0.35); }
+    .badge-unhealthy    { background: rgba(255, 153, 0, 0.15); color: #ff9900; border: 1px solid rgba(255, 153, 0, 0.35); }
+    .badge-hazardous    { background: rgba(196, 77, 255, 0.15); color: #c44dff; border: 1px solid rgba(196, 77, 255, 0.35); }
 
-    .divider { border: none; height: 1px; background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent); margin: 32px 0; }
+    .divider {
+        border: none; height: 1px;
+        background: linear-gradient(to right, transparent, rgba(255,255,255,0.14), transparent);
+        margin: 36px 0;
+    }
 
     .section-tag {
         display: inline-block; background: rgba(109, 211, 255, 0.12); color: #6dd3ff;
-        border: 1px solid rgba(109, 211, 255, 0.25); border-radius: 8px; padding: 3px 10px;
-        font-size: 11.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px;
+        border: 1px solid rgba(109, 211, 255, 0.28); border-radius: 8px; padding: 4px 12px;
+        font-size: 11.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
+        margin-bottom: 8px;
     }
 
-    .footer { text-align: center; color: #5b6478; padding: 30px 0 12px 0; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 34px; font-size: 13px; }
+    /* ---------- Footer ---------- */
+    .footer {
+        text-align: center; color: #5b6478; padding: 34px 0 14px 0;
+        border-top: 1px solid rgba(255,255,255,0.07); margin-top: 38px; font-size: 13px;
+    }
     .footer a { color: #6dd3ff; text-decoration: none; font-weight: 600; }
     .footer a:hover { text-decoration: underline; }
 
+    /* ---------- Buttons ---------- */
     .stButton > button {
-        border-radius: 12px; font-weight: 600; transition: all 0.3s ease;
+        border-radius: 12px; font-weight: 700; transition: all 0.25s ease;
         background: linear-gradient(135deg, #00c3ff, #7c3aed); color: white; border: none;
-        padding: 10px 24px; box-shadow: 0 4px 20px rgba(0, 195, 255, 0.18);
+        padding: 11px 24px; box-shadow: 0 6px 24px rgba(0, 195, 255, 0.22);
     }
-    .stButton > button:hover { transform: scale(1.02); box-shadow: 0 8px 30px rgba(0, 195, 255, 0.28); }
+    .stButton > button:hover { transform: scale(1.03); box-shadow: 0 10px 32px rgba(0, 195, 255, 0.32); }
 
+    /* ---------- Status dots ---------- */
     .live-dot {
         display: inline-block; width: 9px; height: 9px; border-radius: 50%;
         background: #00e396; animation: pulse-dot 1.6s ease-in-out infinite; margin-right: 8px;
@@ -140,11 +197,24 @@ st.markdown("""
         100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,227,150,0); }
     }
 
-    .advisory-box { border-radius: 16px; padding: 20px 24px; border-left: 4px solid; }
-    .advisory-good        { background: rgba(0,227,150,0.06); border-color: #00e396; }
-    .advisory-moderate     { background: rgba(255,213,79,0.06); border-color: #ffd54f; }
-    .advisory-unhealthy    { background: rgba(255,153,0,0.06); border-color: #ff9900; }
-    .advisory-hazardous    { background: rgba(196,77,255,0.06); border-color: #c44dff; }
+    /* ---------- Advisory box ---------- */
+    .advisory-box { border-radius: 16px; padding: 22px 26px; border-left: 4px solid; }
+    .advisory-good        { background: rgba(0,227,150,0.07); border-color: #00e396; }
+    .advisory-moderate     { background: rgba(255,213,79,0.07); border-color: #ffd54f; }
+    .advisory-unhealthy    { background: rgba(255,153,0,0.07); border-color: #ff9900; }
+    .advisory-hazardous    { background: rgba(196,77,255,0.07); border-color: #c44dff; }
+
+    /* ---------- Sidebar profile card ---------- */
+    .sidebar-profile {
+        text-align:center; padding: 16px 12px; margin-top: 14px;
+        background: linear-gradient(180deg, rgba(0,195,255,0.07), rgba(124,58,237,0.05));
+        border: 1px solid rgba(255,255,255,0.08); border-radius: 16px;
+    }
+
+    /* Scrollbar polish */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -256,11 +326,11 @@ def status_row(label, ok, sublabel=""):
     text = "Online" if ok else "Unreachable"
     color = "#00e396" if ok else "#ff3333"
     st.markdown(f"""
-        <div class="glass-card" style="padding: 16px;">
-            <div style="font-size: 12px; color: #8b93a7;">{label}</div>
-            <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+        <div class="glass-card" style="padding: 18px;">
+            <div style="font-size: 12px; color: #8b93a7; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;">{label}</div>
+            <div style="display:flex; align-items:center; gap:8px; margin-top:8px;">
                 <span class="{dot}"></span>
-                <span style="color:{color}; font-weight:600;">{text}</span>
+                <span style="color:{color}; font-weight:700;">{text}</span>
                 <span style="margin-left:auto; font-size:11px; color:#5b6478;">{sublabel}</span>
             </div>
         </div>
@@ -285,33 +355,31 @@ api_online = forecast_data is not None
 
 with st.sidebar:
     st.markdown("""
-        <div style="text-align:center; padding: 20px 0 10px 0;">
-            <div style="font-size:56px;">🌍</div>
-            <h2 style="margin:6px 0 2px 0; font-size:22px;">Bara Khyber AQI</h2>
-            <p style="color:#8b93a7; font-size:13px; letter-spacing:0.5px;">Forecast System v2.1</p>
+        <div style="text-align:center; padding: 22px 0 10px 0;">
+            <div style="font-size:52px;">🌍</div>
+            <h2 style="margin:8px 0 2px 0; font-size:21px;">Bara Khyber AQI</h2>
+            <p style="color:#8b93a7; font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase;">Forecast System · v2.1</p>
         </div>
     """, unsafe_allow_html=True)
-
-    st.markdown("---")
 
     dot_class = "live-dot" if api_online else "dead-dot"
     status_text = "LIVE" if api_online else "OFFLINE"
     status_color = "#00e396" if api_online else "#ff3333"
     st.markdown(f"""
-        <div style="padding: 4px 0 12px 0;">
-            <div style="display:flex; align-items:center; gap:12px; padding:12px 16px; background:rgba(255,255,255,0.03); border-radius:12px; border:1px solid rgba(255,255,255,0.06);">
+        <div style="padding: 4px 0 14px 0;">
+            <div style="display:flex; align-items:center; gap:12px; padding:13px 16px; background:rgba(255,255,255,0.035); border-radius:14px; border:1px solid rgba(255,255,255,0.08);">
                 <span class="{dot_class}"></span>
                 <span style="color:#8b93a7; font-size:14px;">Backend</span>
                 <span style="margin-left:auto; color:{status_color}; font-size:12px; font-weight:700;">● {status_text}</span>
             </div>
-            <div style="display:flex; justify-content:space-between; padding:8px 16px; font-size:12px; color:#5b6478;">
+            <div style="display:flex; justify-content:space-between; padding:9px 16px; font-size:12px; color:#5b6478;">
                 <span>Checked: {datetime.now().strftime('%H:%M')}</span>
                 <span>Open-Meteo + AQICN</span>
             </div>
         </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("---")
+    st.markdown("<hr class='divider' style='margin:14px 0;'>", unsafe_allow_html=True)
     st.markdown("### 📊 Model Performance")
     performance_data = {
         "H1 (24h)": {"RMSE": 5.97, "R2": 0.843, "MAE": 4.59},
@@ -320,19 +388,19 @@ with st.sidebar:
     }
     for horizon, metrics in performance_data.items():
         st.markdown(f"""
-            <div style="background: rgba(255,255,255,0.025); border-radius:10px; padding:10px 14px; margin:4px 0;">
+            <div style="background: rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:12px 14px; margin:6px 0;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span style="color:#8b93a7; font-size:13px;">{horizon}</span>
-                    <span style="color:#e2e8f0; font-size:13px; font-weight:500;">R² <span class="gradient-text">{metrics['R2']:.3f}</span></span>
+                    <span style="color:#8b93a7; font-size:13px; font-weight:600;">{horizon}</span>
+                    <span style="color:#e2e8f0; font-size:13px; font-weight:600;">R² <span class="gradient-text">{metrics['R2']:.3f}</span></span>
                 </div>
-                <div style="display:flex; justify-content:space-between; font-size:11px; color:#5b6478; margin-top:2px;">
+                <div style="display:flex; justify-content:space-between; font-size:11px; color:#5b6478; margin-top:4px;">
                     <span>RMSE: {metrics['RMSE']:.2f}</span>
                     <span>MAE: {metrics['MAE']:.2f}</span>
                 </div>
             </div>
         """, unsafe_allow_html=True)
 
-    st.markdown("---")
+    st.markdown("<hr class='divider' style='margin:14px 0;'>", unsafe_allow_html=True)
 
     with st.expander("🧠 Features Used in Model", expanded=False):
         st.markdown("""
@@ -362,19 +430,19 @@ with st.sidebar:
             </div>
         """, unsafe_allow_html=True)
 
-    st.markdown("---")
+    st.markdown("<hr class='divider' style='margin:14px 0;'>", unsafe_allow_html=True)
 
     if st.button("🔄 Refresh Data", use_container_width=True):
         st.cache_data.clear()
         st.rerun()
 
     st.markdown("""
-        <div style="text-align:center; padding:15px 0 5px 0; border-top:1px solid rgba(255,255,255,0.06); margin-top:14px;">
-            <div style="color:#6dd3ff; font-weight:700; font-size:14px;">👨‍💻 Muhammad Waqar</div>
-            <div style="color:#8b93a7; font-size:12px;">10 Pearls Shine Intern • Cohort 9</div>
+        <div class="sidebar-profile">
+            <div style="color:#6dd3ff; font-weight:800; font-size:14.5px;">👨‍💻 Muhammad Waqar</div>
+            <div style="color:#8b93a7; font-size:12px; margin-top:2px;">10 Pearls Shine Intern • Cohort 9</div>
             <div style="color:#5b6478; font-size:11px; margin-top:4px;">AI/ML Engineer</div>
-            <div style="display:flex; justify-content:center; gap:12px; margin-top:8px; font-size:13px;">
-                <a href="https://github.com/Waqar738" target="_blank" style="color:#6dd3ff; text-decoration:none;">GitHub</a>
+            <div style="display:flex; justify-content:center; gap:12px; margin-top:10px; font-size:13px;">
+                <a href="https://github.com/Waqar738" target="_blank" style="color:#6dd3ff; text-decoration:none; font-weight:600;">GitHub ↗</a>
             </div>
         </div>
     """, unsafe_allow_html=True)
@@ -400,15 +468,13 @@ if forecast_data:
         st.json(forecast_data)
         st.stop()
 
-    st.markdown("""
-        <div style="text-align:center; padding:10px 0 5px 0;">
-            <h1 style="font-size:46px; margin:0; letter-spacing:-0.5px;">🌍 Bara Khyber AQI Forecast</h1>
-            <p style="color:#8b93a7; font-size:18px; margin:6px 0; letter-spacing:0.3px;">
-                AI-Powered Multi-Horizon Air Quality Prediction
-            </p>
-            <p style="color:#5b6478; font-size:14px; margin-top:4px;">
-                Built by <strong style="color:#6dd3ff;">Muhammad Waqar</strong> • 10 Pearls Shine Intern • Cohort 9
-            </p>
+    # ---- HERO ----
+    st.markdown(f"""
+        <div class="hero-wrap">
+            <span class="hero-badge">🌍 Live Environmental Intelligence</span>
+            <h1 class="hero-title">Bara Khyber AQI Forecast</h1>
+            <p class="hero-sub">AI-powered, multi-horizon air quality prediction for the next 72 hours — built on a production MLOps pipeline.</p>
+            <p class="hero-author">Built by <strong>Muhammad Waqar</strong> · 10 Pearls Shine Intern · Cohort 9</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -425,40 +491,40 @@ if forecast_data:
         if isinstance(live_val, (int, float)):
             st.markdown(f"""
                 <div class="glass-card" style="text-align:center;">
-                    <div style="font-size:14px; color:#8b93a7;">Live AQI</div>
-                    <div style="font-size:54px; font-weight:800; color:{aqi_lookup(live_val)[2]}; line-height:1.2;">{live_val}</div>
-                    <div>{badge_html(live_val)}</div>
-                    <div style="font-size:12px; color:#5b6478; margin-top:8px;">Updated: {datetime.now().strftime('%H:%M')}</div>
+                    <div style="font-size:13px; color:#8b93a7; font-weight:600; letter-spacing:0.05em; text-transform:uppercase;">Live AQI</div>
+                    <div style="font-size:56px; font-weight:800; color:{aqi_lookup(live_val)[2]}; line-height:1.2; margin-top:6px;">{live_val}</div>
+                    <div style="margin-top:6px;">{badge_html(live_val)}</div>
+                    <div style="font-size:12px; color:#5b6478; margin-top:10px;">Updated: {datetime.now().strftime('%H:%M')}</div>
                 </div>
             """, unsafe_allow_html=True)
         else:
             st.markdown("""
                 <div class="glass-card" style="text-align:center;">
-                    <div style="font-size:14px; color:#8b93a7;">Live AQI</div>
-                    <div style="font-size:30px; font-weight:600; color:#5b6478; margin-top:10px;">N/A</div>
-                    <div style="font-size:12px; color:#5b6478; margin-top:8px;">Live feed unavailable — using model forecast below</div>
+                    <div style="font-size:13px; color:#8b93a7; font-weight:600; letter-spacing:0.05em; text-transform:uppercase;">Live AQI</div>
+                    <div style="font-size:30px; font-weight:600; color:#5b6478; margin-top:14px;">N/A</div>
+                    <div style="font-size:12px; color:#5b6478; margin-top:10px;">Live feed unavailable — using model forecast below</div>
                 </div>
             """, unsafe_allow_html=True)
 
     with col2:
         st.markdown("""
             <div class="glass-card">
-                <div style="font-size:14px; color:#8b93a7; margin-bottom:10px;">📊 AQI Scale</div>
-                <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr 1fr; gap:8px; text-align:center;">
-                    <div style="background:rgba(255,255,255,0.025); border-radius:8px; padding:8px;">
-                        <div style="color:#00e396; font-weight:700;">0–50</div><div style="font-size:11px; color:#5b6478;">Good</div>
+                <div style="font-size:13px; color:#8b93a7; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; margin-bottom:14px;">📊 AQI Scale</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr 1fr; gap:10px; text-align:center;">
+                    <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:10px;">
+                        <div style="color:#00e396; font-weight:800;">0–50</div><div style="font-size:11px; color:#5b6478; margin-top:2px;">Good</div>
                     </div>
-                    <div style="background:rgba(255,255,255,0.025); border-radius:8px; padding:8px;">
-                        <div style="color:#ffd54f; font-weight:700;">51–100</div><div style="font-size:11px; color:#5b6478;">Moderate</div>
+                    <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:10px;">
+                        <div style="color:#ffd54f; font-weight:800;">51–100</div><div style="font-size:11px; color:#5b6478; margin-top:2px;">Moderate</div>
                     </div>
-                    <div style="background:rgba(255,255,255,0.025); border-radius:8px; padding:8px;">
-                        <div style="color:#ff9900; font-weight:700;">101–150</div><div style="font-size:11px; color:#5b6478;">Unhealthy(S)</div>
+                    <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:10px;">
+                        <div style="color:#ff9900; font-weight:800;">101–150</div><div style="font-size:11px; color:#5b6478; margin-top:2px;">Unhealthy(S)</div>
                     </div>
-                    <div style="background:rgba(255,255,255,0.025); border-radius:8px; padding:8px;">
-                        <div style="color:#ff3333; font-weight:700;">151–200</div><div style="font-size:11px; color:#5b6478;">Unhealthy</div>
+                    <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:10px;">
+                        <div style="color:#ff3333; font-weight:800;">151–200</div><div style="font-size:11px; color:#5b6478; margin-top:2px;">Unhealthy</div>
                     </div>
-                    <div style="background:rgba(255,255,255,0.025); border-radius:8px; padding:8px;">
-                        <div style="color:#c44dff; font-weight:700;">201+</div><div style="font-size:11px; color:#5b6478;">Hazardous</div>
+                    <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:10px;">
+                        <div style="color:#c44dff; font-weight:800;">201+</div><div style="font-size:11px; color:#5b6478; margin-top:2px;">Hazardous</div>
                     </div>
                 </div>
             </div>
@@ -467,12 +533,12 @@ if forecast_data:
     with col3:
         st.markdown(f"""
             <div class="glass-card">
-                <div style="font-size:14px; color:#8b93a7;">Data Sources</div>
-                <div style="font-size:13px; color:#8b93a7; margin-top:8px; text-align:left;">
+                <div style="font-size:13px; color:#8b93a7; font-weight:600; letter-spacing:0.05em; text-transform:uppercase;">Data Sources</div>
+                <div style="font-size:13px; color:#c7ced9; margin-top:12px; text-align:left; line-height:2;">
                     <div>🔹 Open-Meteo (Weather)</div>
                     <div>🔹 AQICN (Live AQI)</div>
                     <div>🔹 Custom Model (Forecast)</div>
-                    <div style="margin-top:8px; font-size:11px; color:#5b6478;">Location: Bara Khyber, Pakistan</div>
+                    <div style="margin-top:10px; font-size:11px; color:#5b6478;">Location: Bara Khyber, Pakistan</div>
                     <div style="font-size:11px; color:#5b6478;">Last sync: {datetime.now().strftime('%Y-%m-%d %H:%M')}</div>
                 </div>
             </div>
@@ -556,17 +622,17 @@ if forecast_data:
     a1, a2 = st.columns([1, 2.5])
     with a1:
         st.markdown(f"""
-            <div style="text-align:center; background:rgba(255,255,255,0.025); border-radius:16px; padding:24px; border:1px solid rgba(255,255,255,0.06);">
-                <div style="font-size:52px; font-weight:800; color:{color};">{max_aqi:.0f}</div>
-                <div style="font-size:14px; color:#8b93a7;">Peak AQI (3-day)</div>
-                <div style="margin-top:8px;">{badge_html(max_aqi)}</div>
+            <div style="text-align:center; background:linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.01)); border-radius:18px; padding:26px; border:1px solid rgba(255,255,255,0.08);">
+                <div style="font-size:54px; font-weight:800; color:{color};">{max_aqi:.0f}</div>
+                <div style="font-size:13px; color:#8b93a7; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; margin-top:2px;">Peak AQI (3-day)</div>
+                <div style="margin-top:10px;">{badge_html(max_aqi)}</div>
             </div>
         """, unsafe_allow_html=True)
     with a2:
         st.markdown(f"""
             <div class="advisory-box advisory-{slug}">
-                <div style="font-size:16px; font-weight:700;">{title}</div>
-                <div style="font-size:14px; color:#c7ced9; margin-top:8px;">{body}</div>
+                <div style="font-size:17px; font-weight:800;">{title}</div>
+                <div style="font-size:14px; color:#c7ced9; margin-top:10px; line-height:1.6;">{body}</div>
             </div>
         """, unsafe_allow_html=True)
 
@@ -582,25 +648,25 @@ if forecast_data:
             model = best_model_data["model"]
             st.markdown(f"""
                 <div class="glass-card">
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                        <div style="background:rgba(255,255,255,0.025); border-radius:12px; padding:14px; text-align:center;">
-                            <div style="font-size:11px; color:#8b93a7;">Model</div>
-                            <div style="font-size:15px; font-weight:700; color:#6dd3ff;">{model.get('model_name', 'Random Forest')}</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                        <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:16px; text-align:center;">
+                            <div style="font-size:11px; color:#8b93a7; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;">Model</div>
+                            <div style="font-size:15px; font-weight:700; color:#6dd3ff; margin-top:4px;">{model.get('model_name', 'Random Forest')}</div>
                         </div>
-                        <div style="background:rgba(255,255,255,0.025); border-radius:12px; padding:14px; text-align:center;">
-                            <div style="font-size:11px; color:#8b93a7;">Horizon</div>
-                            <div style="font-size:15px; font-weight:700; color:#e2e8f0;">H{model.get('horizon', 1)} (24h)</div>
+                        <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:16px; text-align:center;">
+                            <div style="font-size:11px; color:#8b93a7; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;">Horizon</div>
+                            <div style="font-size:15px; font-weight:700; color:#e2e8f0; margin-top:4px;">H{model.get('horizon', 1)} (24h)</div>
                         </div>
-                        <div style="background:rgba(255,255,255,0.025); border-radius:12px; padding:14px; text-align:center;">
-                            <div style="font-size:11px; color:#8b93a7;">RMSE</div>
-                            <div style="font-size:18px; font-weight:800; color:#00c3ff;">{model.get('rmse', 0):.2f}</div>
+                        <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:16px; text-align:center;">
+                            <div style="font-size:11px; color:#8b93a7; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;">RMSE</div>
+                            <div style="font-size:19px; font-weight:800; color:#00c3ff; margin-top:4px;">{model.get('rmse', 0):.2f}</div>
                         </div>
-                        <div style="background:rgba(255,255,255,0.025); border-radius:12px; padding:14px; text-align:center;">
-                            <div style="font-size:11px; color:#8b93a7;">R² Score</div>
-                            <div style="font-size:18px; font-weight:800; color:#7c3aed;">{model.get('r2', 0):.3f}</div>
+                        <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:16px; text-align:center;">
+                            <div style="font-size:11px; color:#8b93a7; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;">R² Score</div>
+                            <div style="font-size:19px; font-weight:800; color:#7c3aed; margin-top:4px;">{model.get('r2', 0):.3f}</div>
                         </div>
                     </div>
-                    <div style="margin-top:12px; text-align:center; font-size:13px; color:#8b93a7;">
+                    <div style="margin-top:14px; text-align:center; font-size:13px; color:#8b93a7;">
                         Status: <span style="color:#00e396; font-weight:700;">● Production Ready</span>
                     </div>
                 </div>
@@ -627,30 +693,30 @@ if forecast_data:
     fi1, fi2, fi3 = st.columns(3)
     with fi1:
         st.markdown("""
-            <div class="glass-card" style="padding:18px;">
-                <div style="font-size:13px; color:#8b93a7;">🔹 Strongest Positive Drivers</div>
-                <div style="margin-top:8px;">
-                    <div style="display:flex; justify-content:space-between; padding:4px 0;"><span style="color:#e2e8f0;">pm2_5</span><span style="color:#00c3ff;">+0.19</span></div>
-                    <div style="display:flex; justify-content:space-between; padding:4px 0;"><span style="color:#e2e8f0;">aqi_pm25 (lag)</span><span style="color:#00c3ff;">+0.17</span></div>
-                    <div style="display:flex; justify-content:space-between; padding:4px 0;"><span style="color:#e2e8f0;">day</span><span style="color:#7c3aed;">+0.12</span></div>
+            <div class="glass-card" style="padding:20px;">
+                <div style="font-size:13px; color:#8b93a7; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;">🔹 Strongest Positive Drivers</div>
+                <div style="margin-top:12px;">
+                    <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:#e2e8f0;">pm2_5</span><span style="color:#00c3ff; font-weight:700;">+0.19</span></div>
+                    <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:#e2e8f0;">aqi_pm25 (lag)</span><span style="color:#00c3ff; font-weight:700;">+0.17</span></div>
+                    <div style="display:flex; justify-content:space-between; padding:6px 0;"><span style="color:#e2e8f0;">day</span><span style="color:#7c3aed; font-weight:700;">+0.12</span></div>
                 </div>
             </div>
         """, unsafe_allow_html=True)
     with fi2:
         st.markdown("""
-            <div class="glass-card" style="padding:18px;">
-                <div style="font-size:13px; color:#8b93a7;">🔸 Reading This Chart</div>
-                <div style="margin-top:8px; font-size:13px; color:#8b93a7; line-height:1.7;">
+            <div class="glass-card" style="padding:20px;">
+                <div style="font-size:13px; color:#8b93a7; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;">🔸 Reading This Chart</div>
+                <div style="margin-top:12px; font-size:13px; color:#8b93a7; line-height:1.8;">
                     Values show how strongly each feature moves the predicted AQI.<br><br>
-                    <span style="color:#00c3ff;">Higher magnitude</span> = stronger influence on the forecast.
+                    <span style="color:#00c3ff; font-weight:600;">Higher magnitude</span> = stronger influence on the forecast.
                 </div>
             </div>
         """, unsafe_allow_html=True)
     with fi3:
         st.markdown("""
-            <div class="glass-card" style="padding:18px;">
-                <div style="font-size:13px; color:#8b93a7;">🔹 Key Takeaways</div>
-                <div style="margin-top:8px; font-size:13px; color:#8b93a7; line-height:1.8;">
+            <div class="glass-card" style="padding:20px;">
+                <div style="font-size:13px; color:#8b93a7; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;">🔹 Key Takeaways</div>
+                <div style="margin-top:12px; font-size:13px; color:#8b93a7; line-height:1.9;">
                     • <span style="color:#00c3ff;">pm2_5</span> is the dominant predictor<br>
                     • <span style="color:#7c3aed;">day</span> captures weekly cycles<br>
                     • <span style="color:#7c3aed;">nitrogen_dioxide</span> reflects traffic load<br>
@@ -675,8 +741,8 @@ if forecast_data:
 
 else:
     st.markdown("""
-        <div class="glass-card" style="text-align:center; padding:50px 20px;">
-            <div style="font-size:48px; margin-bottom:16px;">🔌</div>
+        <div class="glass-card" style="text-align:center; padding:56px 20px;">
+            <div style="font-size:50px; margin-bottom:18px;">🔌</div>
             <h3>Backend Connection Error</h3>
             <p style="color:#8b93a7;">Unable to reach the prediction engine. It may be cold-starting on Railway — please retry in a few seconds.</p>
         </div>
@@ -691,7 +757,7 @@ else:
 
 st.markdown(f"""
     <div class="footer">
-        <p style="font-size:15px;">🌍 <strong>Bara Khyber AQI Forecast System</strong></p>
+        <p style="font-size:15.5px;">🌍 <strong>Bara Khyber AQI Forecast System</strong></p>
         <p>Built with ❤️ by <strong style="color:#6dd3ff;">Muhammad Waqar</strong> • 10 Pearls Shine Intern • Cohort 9</p>
         <p style="font-size:12px; color:#5b6478;">🚀 Production-Grade MLOps Pipeline • FastAPI + Streamlit • Feature Importance Analysis</p>
         <p style="font-size:11px; color:#3d4457; margin-top:8px;">📍 Bara Khyber, Pakistan • Last refreshed {datetime.now().strftime('%Y-%m-%d %H:%M')} · © 2026 All Rights Reserved</p>
