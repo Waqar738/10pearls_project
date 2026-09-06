@@ -9,6 +9,7 @@ import numpy as np
 import plotly.graph_objects as go
 import requests
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 # ============================================================
 # PAGE CONFIG
@@ -431,7 +432,7 @@ with st.spinner("🔄 Connecting to inference backend..."):
 api_online = forecast_data is not None
 
 # ============================================================
-# SIDEBAR — redesigned
+# SIDEBAR 
 # ============================================================
 
 with st.sidebar:
@@ -555,7 +556,7 @@ if forecast_data:
             <p class="hero-sub">A clear, simple view of the air around you — with a 72-hour AI forecast, live readings, and health tips, all in one place.</p>
             <div class="hero-meta">
                 <span class="hero-chip">📍 <strong>Bara Khyber</strong>, Pakistan</span>
-                <span class="hero-chip">🕒 <strong>{datetime.now().strftime('%d %b %Y, %H:%M')}</strong></span>
+                <span class="hero-chip">🕒 <strong>{datetime.now(ZoneInfo("Asia/Karachi")).strftime('%d %b %Y, %H:%M')}</strong></span>
                 <span class="hero-chip">👨‍💻 Built by <strong>Muhammad Waqar</strong></span>
             </div>
         </div>
