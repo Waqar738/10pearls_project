@@ -576,7 +576,7 @@ if forecast_data:
                     <div style="font-size:13px; color:#8b93a7; font-weight:600; letter-spacing:0.05em; text-transform:uppercase;">Live AQI</div>
                     <div style="font-size:56px; font-weight:800; color:{aqi_lookup(live_val)[2]}; line-height:1.2; margin-top:6px;">{live_val}</div>
                     <div style="margin-top:6px;">{badge_html(live_val)}</div>
-                    <div style="font-size:12px; color:#5b6478; margin-top:10px;">Updated: {datetime.now().strftime('%H:%M')}</div>
+                    <div style="font-size:12px; color:#5b6478; margin-top:10px;">Updated: {datetime.now(ZoneInfo("Asia/Karachi")).strftime('%H:%M')}</div>
                 </div>
             """, unsafe_allow_html=True)
         else:
@@ -621,7 +621,7 @@ if forecast_data:
                     <div>🔹 AQICN (Live AQI)</div>
                     <div>🔹 Custom Model (Forecast)</div>
                     <div style="margin-top:10px; font-size:11px; color:#5b6478;">Location: Bara Khyber, Pakistan</div>
-                    <div style="font-size:11px; color:#5b6478;">Last sync: {datetime.now().strftime('%Y-%m-%d %H:%M')}</div>
+                    <div style="font-size:11px; color:#5b6478;">Last sync: {datetime.now(ZoneInfo("Asia/Karachi")).strftime('%Y-%m-%d %H:%M')}</div>
                 </div>
             </div>
         """, unsafe_allow_html=True)
@@ -849,7 +849,7 @@ st.markdown(f"""
             <span class="foot-tag">📍 Bara Khyber, Pakistan</span>
         </div>
         <div class="foot-bottom">
-            Last refreshed {datetime.now().strftime('%Y-%m-%d %H:%M')} · © 2026 All Rights Reserved
+            Last refreshed {datetime.now(ZoneInfo("Asia/Karachi")).strftime('%Y-%m-%d %H:%M')} · © 2026 All Rights Reserved
         </div>
     </div>
 """, unsafe_allow_html=True)
