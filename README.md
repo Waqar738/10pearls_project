@@ -12,7 +12,7 @@
 
 | Component              | URL |
 |------------------------|-----|
-| **Streamlit Dashboard** | [https://waqar-aqi-predictor.streamlit.app/](https://waqar-aqi-predictor.streamlit.app/) |
+| **Streamlit Dashboard** | [https://waqar-aqi-predictor-Khyber/]([https://waqar-aqi-predictor.streamlit.app/](https://10pearlsproject-gpnnfxrh9tjrkzpnsqvpai.streamlit.app/)) |
 | **Production API**     | [https://aqi-predictor-karachi-production.up.railway.app](https://aqi-predictor-karachi-production.up.railway.app) |
 
 ---
