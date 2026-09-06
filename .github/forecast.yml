@@ -1,0 +1,25 @@
+name: Daily Forecast Generation
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  forecast:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install -r requirements.txt
+
+      - env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python -m app.pipelines.generate_daily_forecast

@@ -1,0 +1,45 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environments
+.venv/
+venv/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Models & artifacts
+
+data/
+db/
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.*
+!app/db/
+!app/db/**
+
+historical_data.csv
+__pycache__/
+*.pyc
+historical_data.csv
+*.joblib
+models/
+# Model artifacts
+*.pkl
+production_model_*.pkl
+
+# Training dataset exports
+training_dataset.csv
+
+# Local datasets
+eda_training_dataset.csv
+
+# Virtual environment
+venv/
+.env

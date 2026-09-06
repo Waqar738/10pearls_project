@@ -1,0 +1,14 @@
+venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+
+notebooks
+docs
+*.csv
+*.ipynb
+.streamlit
+.git
+.github
+.devcontainer

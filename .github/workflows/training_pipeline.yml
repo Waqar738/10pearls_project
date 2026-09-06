@@ -1,0 +1,56 @@
+name: Daily Training Pipeline
+
+on:
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: training-pipeline
+  cancel-in-progress: false
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements_backend.txt
+
+      - name: Train Horizon 1
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          DATABASE_NAME: aqi_system
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python -m app.pipelines.training_pipeline --horizon 1
+
+      - name: Train Horizon 2
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          DATABASE_NAME: aqi_system
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python -m app.pipelines.training_pipeline --horizon 2
+
+      - name: Train Horizon 3
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          DATABASE_NAME: aqi_system
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python -m app.pipelines.training_pipeline --horizon 3
+
+      - name: Training Completed
+        run: echo "✅ All horizons trained successfully"

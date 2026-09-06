@@ -1,0 +1,14 @@
+from datetime import datetime
+from app.db.mongo import get_db
+
+db = get_db()
+collection = db["forecast_results"]
+
+collection.insert_many(
+    df_forecast[["datetime", "predicted_aqi"]]
+    .assign(
+        horizon=horizon,
+        generated_at=datetime.utcnow()
+    )
+    .to_dict("records")
+)
