@@ -16,7 +16,7 @@ from datetime import datetime
 
 st.set_page_config(
     page_title="Bara Khyber AQI Forecast | Muhammad Waqar",
-    page_icon="🌍",
+    page_icon="🌤️",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -48,62 +48,99 @@ ADVISORY_TEXT = {
 }
 
 # ============================================================
-# STYLE — new, more polished visual theme
+# STYLE — sky / cloud themed redesign
 # ============================================================
 
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
     html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
     h1, h2, h3, h4 { font-family: 'Sora', sans-serif !important; }
 
-    /* ---------- Background ---------- */
+    /* ---------- Sky background with drifting clouds ---------- */
     .stApp {
-        background:
-            radial-gradient(circle at 12% -10%, rgba(0, 195, 255, 0.10) 0%, transparent 45%),
-            radial-gradient(circle at 100% 0%, rgba(124, 58, 237, 0.12) 0%, transparent 40%),
-            linear-gradient(180deg, #0b0f1a 0%, #070a12 45%, #04050a 100%);
+        background: linear-gradient(180deg, #0d1b2e 0%, #10233d 30%, #0a1626 70%, #060c17 100%);
         color: #ffffff;
+        overflow-x: hidden;
     }
 
+    .cloud-layer {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+    }
+    .cloud {
+        position: absolute;
+        opacity: 0.10;
+        filter: blur(1px);
+        animation: drift linear infinite;
+    }
+    .cloud svg { width: 100%; height: 100%; fill: #ffffff; }
+    .cloud.c1 { width: 340px; top: 6%;  left: -20%; animation-duration: 70s; opacity: 0.08; }
+    .cloud.c2 { width: 220px; top: 22%; left: -25%; animation-duration: 50s; animation-delay: -10s; opacity: 0.10; }
+    .cloud.c3 { width: 420px; top: 48%; left: -30%; animation-duration: 90s; animation-delay: -30s; opacity: 0.06; }
+    .cloud.c4 { width: 260px; top: 68%; left: -20%; animation-duration: 60s; animation-delay: -5s; opacity: 0.08; }
+    .cloud.c5 { width: 180px; top: 85%; left: -15%; animation-duration: 45s; animation-delay: -20s; opacity: 0.09; }
+    @keyframes drift {
+        from { transform: translateX(0); }
+        to   { transform: translateX(140vw); }
+    }
+
+    .glow-orb {
+        position: fixed; border-radius: 50%; filter: blur(90px); z-index: 0; pointer-events: none;
+    }
+    .glow-1 { width: 480px; height: 480px; background: rgba(0, 195, 255, 0.16); top: -140px; left: -120px; }
+    .glow-2 { width: 420px; height: 420px; background: rgba(124, 58, 237, 0.14); bottom: -120px; right: -100px; }
+
+    section.main > div { position: relative; z-index: 1; }
+
+    /* ---------- Sidebar ---------- */
     section[data-testid="stSidebar"] {
-        background: linear-gradient(180deg, rgba(10, 13, 22, 0.98), rgba(6, 8, 14, 0.99));
-        border-right: 1px solid rgba(255,255,255,0.07);
+        background: linear-gradient(200deg, #0b1524 0%, #060d18 100%);
+        border-right: 1px solid rgba(255,255,255,0.06);
     }
 
-    /* ---------- Hero header ---------- */
-    .hero-wrap {
+    /* ---------- Hero banner ---------- */
+    .hero-banner {
+        position: relative;
         text-align: center;
-        padding: 28px 10px 10px 10px;
+        padding: 40px 24px 34px 24px;
+        border-radius: 26px;
+        margin: 6px 0 10px 0;
+        background: linear-gradient(135deg, rgba(0,195,255,0.10), rgba(124,58,237,0.10) 60%, rgba(0,195,255,0.04));
+        border: 1px solid rgba(255,255,255,0.10);
+        overflow: hidden;
     }
-    .hero-badge {
-        display: inline-flex; align-items: center; gap: 8px;
-        background: rgba(0, 195, 255, 0.08);
-        border: 1px solid rgba(0, 195, 255, 0.25);
-        color: #6dd3ff; font-size: 12.5px; font-weight: 700;
-        letter-spacing: 0.08em; text-transform: uppercase;
-        padding: 6px 16px; border-radius: 999px; margin-bottom: 18px;
+    .hero-banner::before {
+        content: "";
+        position: absolute; inset: 0;
+        background: radial-gradient(circle at 15% 20%, rgba(255,255,255,0.10), transparent 40%);
     }
+    .hero-icon { font-size: 46px; margin-bottom: 6px; }
     .hero-title {
-        font-size: 48px; font-weight: 800; margin: 0; letter-spacing: -1px;
-        background: linear-gradient(135deg, #ffffff 20%, #a9e9ff 60%, #c7a9ff 100%);
+        font-size: 44px; font-weight: 800; margin: 4px 0 0 0; letter-spacing: -1px;
+        background: linear-gradient(135deg, #ffffff 15%, #8fe3ff 55%, #c7a9ff 100%);
         -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .hero-sub {
-        color: #9aa4b8; font-size: 17px; margin: 10px auto 0 auto; max-width: 640px;
+    .hero-sub { color: #a9b3c6; font-size: 16.5px; margin: 12px auto 0 auto; max-width: 660px; }
+    .hero-meta {
+        display: inline-flex; gap: 18px; margin-top: 20px; flex-wrap: wrap; justify-content: center;
     }
-    .hero-author {
-        color: #5b6478; font-size: 13.5px; margin-top: 10px;
+    .hero-chip {
+        background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+        color: #cfd8e8; font-size: 12.5px; padding: 7px 16px; border-radius: 999px;
     }
-    .hero-author strong { color: #6dd3ff; }
+    .hero-chip strong { color: #6dd3ff; }
 
     /* ---------- Cards ---------- */
     .glass-card {
-        background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015));
-        backdrop-filter: blur(18px);
+        background: rgba(255,255,255,0.035);
+        backdrop-filter: blur(16px);
         border: 1px solid rgba(255, 255, 255, 0.09);
-        border-radius: 18px;
+        border-radius: 20px;
         padding: 24px;
         margin: 8px 0;
         box-shadow: 0 10px 34px rgba(0, 0, 0, 0.35);
@@ -111,7 +148,7 @@ st.markdown("""
     }
     .glass-card:hover {
         transform: translateY(-3px);
-        border-color: rgba(0, 195, 255, 0.3);
+        border-color: rgba(0, 195, 255, 0.30);
         box-shadow: 0 18px 45px rgba(0, 195, 255, 0.10);
     }
 
@@ -127,9 +164,9 @@ st.markdown("""
 
     /* ---------- Metric boxes ---------- */
     .metric-box {
-        background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+        background: rgba(255,255,255,0.03);
         border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 16px;
+        border-radius: 18px;
         padding: 22px 18px;
         text-align: center;
         height: 100%;
@@ -170,16 +207,35 @@ st.markdown("""
     }
 
     /* ---------- Footer ---------- */
-    .footer {
-        text-align: center; color: #5b6478; padding: 34px 0 14px 0;
-        border-top: 1px solid rgba(255,255,255,0.07); margin-top: 38px; font-size: 13px;
+    .footer-wrap {
+        margin-top: 44px;
+        border-radius: 22px;
+        padding: 30px 24px 22px 24px;
+        background: linear-gradient(135deg, rgba(0,195,255,0.06), rgba(124,58,237,0.06));
+        border: 1px solid rgba(255,255,255,0.08);
+        text-align: center;
     }
-    .footer a { color: #6dd3ff; text-decoration: none; font-weight: 600; }
-    .footer a:hover { text-decoration: underline; }
+    .footer-wrap .foot-icon { font-size: 30px; margin-bottom: 8px; }
+    .footer-wrap .foot-title { font-size: 16px; font-weight: 800; color: #ffffff; }
+    .footer-wrap .foot-line { color: #9aa4b8; font-size: 13px; margin-top: 6px; }
+    .footer-wrap .foot-line strong { color: #6dd3ff; }
+    .footer-wrap .foot-tags {
+        display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 16px;
+    }
+    .footer-wrap .foot-tag {
+        background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.10);
+        color: #8b93a7; font-size: 11px; padding: 5px 12px; border-radius: 999px;
+    }
+    .footer-wrap .foot-bottom {
+        font-size: 11px; color: #4b5468; margin-top: 18px; padding-top: 14px;
+        border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .footer-wrap a { color: #6dd3ff; text-decoration: none; font-weight: 600; }
+    .footer-wrap a:hover { text-decoration: underline; }
 
     /* ---------- Buttons ---------- */
     .stButton > button {
-        border-radius: 12px; font-weight: 700; transition: all 0.25s ease;
+        border-radius: 14px; font-weight: 700; transition: all 0.25s ease;
         background: linear-gradient(135deg, #00c3ff, #7c3aed); color: white; border: none;
         padding: 11px 24px; box-shadow: 0 6px 24px rgba(0, 195, 255, 0.22);
     }
@@ -198,17 +254,32 @@ st.markdown("""
     }
 
     /* ---------- Advisory box ---------- */
-    .advisory-box { border-radius: 16px; padding: 22px 26px; border-left: 4px solid; }
+    .advisory-box { border-radius: 18px; padding: 22px 26px; border-left: 4px solid; }
     .advisory-good        { background: rgba(0,227,150,0.07); border-color: #00e396; }
     .advisory-moderate     { background: rgba(255,213,79,0.07); border-color: #ffd54f; }
     .advisory-unhealthy    { background: rgba(255,153,0,0.07); border-color: #ff9900; }
     .advisory-hazardous    { background: rgba(196,77,255,0.07); border-color: #c44dff; }
 
-    /* ---------- Sidebar profile card ---------- */
+    /* ---------- Sidebar blocks ---------- */
+    .sb-header {
+        text-align:center; padding: 22px 10px 18px 10px;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+        margin-bottom: 14px;
+    }
+    .sb-avatar {
+        width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 10px auto;
+        display:flex; align-items:center; justify-content:center; font-size: 30px;
+        background: linear-gradient(135deg, #00c3ff, #7c3aed);
+        box-shadow: 0 6px 20px rgba(0,195,255,0.35);
+    }
+    .sb-block {
+        background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 14px; padding: 13px 15px; margin: 6px 0;
+    }
     .sidebar-profile {
-        text-align:center; padding: 16px 12px; margin-top: 14px;
-        background: linear-gradient(180deg, rgba(0,195,255,0.07), rgba(124,58,237,0.05));
-        border: 1px solid rgba(255,255,255,0.08); border-radius: 16px;
+        text-align:center; padding: 18px 12px; margin-top: 14px;
+        background: linear-gradient(180deg, rgba(0,195,255,0.08), rgba(124,58,237,0.06));
+        border: 1px solid rgba(255,255,255,0.09); border-radius: 18px;
     }
 
     /* Scrollbar polish */
@@ -216,6 +287,16 @@ st.markdown("""
     ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 8px; }
     ::-webkit-scrollbar-track { background: transparent; }
 </style>
+
+<div class="glow-orb glow-1"></div>
+<div class="glow-orb glow-2"></div>
+<div class="cloud-layer">
+    <div class="cloud c1"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path d="M40,70 a30,30 0 1,1 6,-58 a24,24 0 0,1 44,-4 a26,26 0 1,1 30,60 a20,20 0 0,1 -14,34 h-70 a24,24 0 0,1 4,-32z"/></svg></div>
+    <div class="cloud c2"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path d="M40,70 a30,30 0 1,1 6,-58 a24,24 0 0,1 44,-4 a26,26 0 1,1 30,60 a20,20 0 0,1 -14,34 h-70 a24,24 0 0,1 4,-32z"/></svg></div>
+    <div class="cloud c3"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path d="M40,70 a30,30 0 1,1 6,-58 a24,24 0 0,1 44,-4 a26,26 0 1,1 30,60 a20,20 0 0,1 -14,34 h-70 a24,24 0 0,1 4,-32z"/></svg></div>
+    <div class="cloud c4"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path d="M40,70 a30,30 0 1,1 6,-58 a24,24 0 0,1 44,-4 a26,26 0 1,1 30,60 a20,20 0 0,1 -14,34 h-70 a24,24 0 0,1 4,-32z"/></svg></div>
+    <div class="cloud c5"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path d="M40,70 a30,30 0 1,1 6,-58 a24,24 0 0,1 44,-4 a26,26 0 1,1 30,60 a20,20 0 0,1 -14,34 h-70 a24,24 0 0,1 4,-32z"/></svg></div>
+</div>
 """, unsafe_allow_html=True)
 
 # ============================================================
@@ -350,15 +431,15 @@ with st.spinner("🔄 Connecting to inference backend..."):
 api_online = forecast_data is not None
 
 # ============================================================
-# SIDEBAR
+# SIDEBAR — redesigned
 # ============================================================
 
 with st.sidebar:
     st.markdown("""
-        <div style="text-align:center; padding: 22px 0 10px 0;">
-            <div style="font-size:52px;">🌍</div>
-            <h2 style="margin:8px 0 2px 0; font-size:21px;">Bara Khyber AQI</h2>
-            <p style="color:#8b93a7; font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase;">Forecast System · v2.1</p>
+        <div class="sb-header">
+            <div class="sb-avatar">🌤️</div>
+            <h2 style="margin:0; font-size:20px;">Bara Khyber AQI</h2>
+            <p style="color:#8b93a7; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; margin-top:2px;">Forecast Console · v2.1</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -366,21 +447,25 @@ with st.sidebar:
     status_text = "LIVE" if api_online else "OFFLINE"
     status_color = "#00e396" if api_online else "#ff3333"
     st.markdown(f"""
-        <div style="padding: 4px 0 14px 0;">
-            <div style="display:flex; align-items:center; gap:12px; padding:13px 16px; background:rgba(255,255,255,0.035); border-radius:14px; border:1px solid rgba(255,255,255,0.08);">
+        <div class="sb-block">
+            <div style="display:flex; align-items:center; gap:10px;">
                 <span class="{dot_class}"></span>
                 <span style="color:#8b93a7; font-size:14px;">Backend</span>
                 <span style="margin-left:auto; color:{status_color}; font-size:12px; font-weight:700;">● {status_text}</span>
             </div>
-            <div style="display:flex; justify-content:space-between; padding:9px 16px; font-size:12px; color:#5b6478;">
-                <span>Checked: {datetime.now().strftime('%H:%M')}</span>
+            <div style="display:flex; justify-content:space-between; font-size:11px; color:#5b6478; margin-top:8px;">
+                <span>Checked {datetime.now().strftime('%H:%M')}</span>
                 <span>Open-Meteo + AQICN</span>
             </div>
         </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("<hr class='divider' style='margin:14px 0;'>", unsafe_allow_html=True)
-    st.markdown("### 📊 Model Performance")
+    if st.button("🔄 Refresh Data", use_container_width=True):
+        st.cache_data.clear()
+        st.rerun()
+
+    st.markdown("<hr class='divider' style='margin:16px 0;'>", unsafe_allow_html=True)
+    st.markdown("#### 📊 Model Performance")
     performance_data = {
         "H1 (24h)": {"RMSE": 5.97, "R2": 0.843, "MAE": 4.59},
         "H2 (48h)": {"RMSE": 5.56, "R2": 0.862, "MAE": 4.15},
@@ -388,7 +473,7 @@ with st.sidebar:
     }
     for horizon, metrics in performance_data.items():
         st.markdown(f"""
-            <div style="background: rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:12px 14px; margin:6px 0;">
+            <div class="sb-block">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <span style="color:#8b93a7; font-size:13px; font-weight:600;">{horizon}</span>
                     <span style="color:#e2e8f0; font-size:13px; font-weight:600;">R² <span class="gradient-text">{metrics['R2']:.3f}</span></span>
@@ -400,7 +485,7 @@ with st.sidebar:
             </div>
         """, unsafe_allow_html=True)
 
-    st.markdown("<hr class='divider' style='margin:14px 0;'>", unsafe_allow_html=True)
+    st.markdown("<hr class='divider' style='margin:16px 0;'>", unsafe_allow_html=True)
 
     with st.expander("🧠 Features Used in Model", expanded=False):
         st.markdown("""
@@ -429,12 +514,6 @@ with st.sidebar:
                 • <span style="color:#7c3aed;">nitrogen_dioxide</span> — traffic indicator
             </div>
         """, unsafe_allow_html=True)
-
-    st.markdown("<hr class='divider' style='margin:14px 0;'>", unsafe_allow_html=True)
-
-    if st.button("🔄 Refresh Data", use_container_width=True):
-        st.cache_data.clear()
-        st.rerun()
 
     st.markdown("""
         <div class="sidebar-profile">
@@ -468,17 +547,19 @@ if forecast_data:
         st.json(forecast_data)
         st.stop()
 
-    # ---- HERO ----
+    # ---- NEW HERO BANNER ----
     st.markdown(f"""
-        <div class="hero-wrap">
-            <span class="hero-badge">🌍 Live Environmental Intelligence</span>
-            <h1 class="hero-title">Bara Khyber AQI Forecast</h1>
-            <p class="hero-sub">AI-powered, multi-horizon air quality prediction for the next 72 hours — built on a production MLOps pipeline.</p>
-            <p class="hero-author">Built by <strong>Muhammad Waqar</strong> · 10 Pearls Shine Intern · Cohort 9</p>
+        <div class="hero-banner">
+            <div class="hero-icon">🌤️</div>
+            <h1 class="hero-title">Bara Khyber Air Quality</h1>
+            <p class="hero-sub">A clear, simple view of the air around you — with a 72-hour AI forecast, live readings, and health tips, all in one place.</p>
+            <div class="hero-meta">
+                <span class="hero-chip">📍 <strong>Bara Khyber</strong>, Pakistan</span>
+                <span class="hero-chip">🕒 <strong>{datetime.now().strftime('%d %b %Y, %H:%M')}</strong></span>
+                <span class="hero-chip">👨‍💻 Built by <strong>Muhammad Waqar</strong></span>
+            </div>
         </div>
     """, unsafe_allow_html=True)
-
-    st.markdown("<hr class='divider'>", unsafe_allow_html=True)
 
     # ---- CURRENT AQI ----
     st.markdown("<span class='section-tag'>Live</span>", unsafe_allow_html=True)
@@ -622,7 +703,7 @@ if forecast_data:
     a1, a2 = st.columns([1, 2.5])
     with a1:
         st.markdown(f"""
-            <div style="text-align:center; background:linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.01)); border-radius:18px; padding:26px; border:1px solid rgba(255,255,255,0.08);">
+            <div style="text-align:center; background:rgba(255,255,255,0.035); border-radius:18px; padding:26px; border:1px solid rgba(255,255,255,0.08);">
                 <div style="font-size:54px; font-weight:800; color:{color};">{max_aqi:.0f}</div>
                 <div style="font-size:13px; color:#8b93a7; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; margin-top:2px;">Peak AQI (3-day)</div>
                 <div style="margin-top:10px;">{badge_html(max_aqi)}</div>
@@ -752,14 +833,22 @@ else:
         st.rerun()
 
 # ============================================================
-# FOOTER
+# FOOTER — redesigned
 # ============================================================
 
 st.markdown(f"""
-    <div class="footer">
-        <p style="font-size:15.5px;">🌍 <strong>Bara Khyber AQI Forecast System</strong></p>
-        <p>Built with ❤️ by <strong style="color:#6dd3ff;">Muhammad Waqar</strong> • 10 Pearls Shine Intern • Cohort 9</p>
-        <p style="font-size:12px; color:#5b6478;">🚀 Production-Grade MLOps Pipeline • FastAPI + Streamlit • Feature Importance Analysis</p>
-        <p style="font-size:11px; color:#3d4457; margin-top:8px;">📍 Bara Khyber, Pakistan • Last refreshed {datetime.now().strftime('%Y-%m-%d %H:%M')} · © 2026 All Rights Reserved</p>
+    <div class="footer-wrap">
+        <div class="foot-icon">🌤️</div>
+        <div class="foot-title">Bara Khyber AQI Forecast System</div>
+        <div class="foot-line">Built with ❤️ by <strong>Muhammad Waqar</strong> · 10 Pearls Shine Intern · Cohort 9</div>
+        <div class="foot-tags">
+            <span class="foot-tag">🚀 Production MLOps</span>
+            <span class="foot-tag">⚡ FastAPI + Streamlit</span>
+            <span class="foot-tag">🔬 Feature Importance</span>
+            <span class="foot-tag">📍 Bara Khyber, Pakistan</span>
+        </div>
+        <div class="foot-bottom">
+            Last refreshed {datetime.now().strftime('%Y-%m-%d %H:%M')} · © 2026 All Rights Reserved
+        </div>
     </div>
 """, unsafe_allow_html=True)
